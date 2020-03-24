@@ -1,0 +1,15 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.animate {
+  transition: all 0.3s;
+  transform-origin: 50% 50%;
+}
+
+body {
+  @apply text-gray-800;
+  font-family: 'Roboto';
+}

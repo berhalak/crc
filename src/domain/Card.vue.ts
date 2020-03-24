@@ -1,13 +1,10 @@
 import { Component } from '@/infra/Component';
 import { prop } from 'vue-strict';
-
-
-
+import { Card } from './Card';
 
 export default class extends Component {
-    public msg = "Hello from code behind";
+    @prop
+    value: Card = null;
 
-    public created() {
-        this.$trigger("Started", "Home started");
-    }
+
 }

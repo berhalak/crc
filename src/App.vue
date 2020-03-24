@@ -1,6 +1,5 @@
 <template>
-	<div id="app">
-		Message from first component {{msg}}
+	<div id="app" class="h-full">
 		<router-view />
 	</div>
 </template>

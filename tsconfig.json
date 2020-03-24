@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2017",
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
@@ -11,6 +11,8 @@
     "allowJs": true,
     "experimentalDecorators": true,
     "sourceMap": true,
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "baseUrl": ".",
     "types": [
       "webpack-env",

@@ -11,32 +11,33 @@
 		"test:unit": "vue-cli-service test:unit"
 	},
 	"dependencies": {
-		"ber": "^0.0.10",
-		"register-service-worker": "^1.6.2",
+		"ber": "^0.0.14",
+		"register-service-worker": "^1.7.1",
 		"vue": "^2.6.11",
 		"vue-event-manager": "2.1.2",
-		"vue-router": "^3.1.5",
-		"vue-strict": "^0.0.17"
+		"vue-moveable": "^1.6.1",
+		"vue-router": "^3.1.6",
+		"vue-strict": "^0.0.21"
 	},
 	"devDependencies": {
-		"@types/chai": "^4.2.8",
-		"@types/mocha": "^7.0.1",
-		"vue-cli-plugin-portal": "^1.0.3",
-		"@vue/cli-plugin-e2e-nightwatch": "^4.2.0",
-		"@vue/cli-plugin-pwa": "^4.2.0",
-		"@vue/cli-plugin-typescript": "^4.2.0",
-		"@vue/cli-plugin-unit-mocha": "^4.2.0",
-		"@vue/cli-service": "^4.2.0",
-		"@vue/test-utils": "^1.0.0-beta.31",
+		"@types/chai": "^4.2.11",
+		"@types/mocha": "^7.0.2",
+		"@vue/cli-plugin-e2e-nightwatch": "^4.2.3",
+		"@vue/cli-plugin-pwa": "^4.2.3",
+		"@vue/cli-plugin-typescript": "^4.2.3",
+		"@vue/cli-plugin-unit-mocha": "^4.2.3",
+		"@vue/cli-service": "^4.2.3",
+		"@vue/test-utils": "^1.0.0-beta.32",
 		"chai": "^4.2.0",
 		"node-sass": "^4.13.1",
-		"sass-loader": "^8.0.2",
-		"typescript": "^3.7.5",
-		"vue-template-compiler": "^2.6.11",
 		"postcss-animation": "0.0.12",
 		"postcss-mixins": "^6.2.3",
 		"postcss-preset-env": "^6.7.0",
-		"tailwindcss": "^1.2.0"
+		"sass-loader": "^8.0.2",
+		"tailwindcss": "^1.2.0",
+		"typescript": "^3.8.3",
+		"vue-cli-plugin-portal": "^1.0.4",
+		"vue-template-compiler": "^2.6.11"
 	},
 	"browserslist": [
 		"last 2 Chrome versions"

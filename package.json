@@ -13,6 +13,7 @@
 	"dependencies": {
 		"register-service-worker": "^1.7.1",
 		"vue": "^2.6.11",
+		"vue-event-manager": "^2.1.2",
 		"vue-router": "^3.1.6",
 		"vue-strict": "^0.0.21"
 	},

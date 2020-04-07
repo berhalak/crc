@@ -1,5 +1,8 @@
 module.exports = {
-	runtimeCompiler: true,
+    runtimeCompiler: true,
+     devServer: {
+        disableHostCheck: true
+    },
 	chainWebpack: config => {
 		config.module
 			.rule('vue')

@@ -25,7 +25,9 @@ export default {
 			this.$el.classList.toggle("drag");
 		},
 		drag(e) {
-			if (e.x == 0) return;
+            if (e.x == 0) return;
+            
+            console.log(e);
 
 			const newTop = this.starty + (e.y - this.y);
 			const newLeft = this.startx + (e.x - this.x);

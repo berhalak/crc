@@ -11,9 +11,6 @@ import './setup/registerEventBus'
 
 Vue.config.productionTip = false
 
-import Moveable from 'vue-moveable';
-
-Vue.component("moveable", Moveable);
 
 new Vue({
 	router,

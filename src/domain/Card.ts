@@ -1,14 +1,35 @@
 export class Collaborator {
-    name = '';
-    collaboration = '';
+	name = '';
+	collaboration = '';
 }
 
 export class Card {
-    name = '';
-    duties: string[] = [];
-    collaborators: Collaborator[] = [];
+	static async load(): Promise<Card[]> {
+		const data = localStorage.getItem("cards") ?? "[]";
+		const list = JSON.parse(data) as any[];
+		return list.map(x => new Card(x));
+	}
+
+	static async addNew() {
+		const data = localStorage.getItem("cards") ?? "[]";
+		const list = JSON.parse(data) as any[];
+		list.push(new Card());
+		localStorage.setItem("cards", JSON.stringify(list));
+	}
+
+	name = 'Unknown';
+	duties: string[] = [];
+	collaborators: Collaborator[] = [];
+
+	constructor(data?: any) {
+		if (data) {
+			this.name = data.name;
+			this.duties = data.duties;
+			this.collaborators = data.collaborators;
+		}
+	}
 }
 
 export class Board {
-    cards: Card[] = [];
+	cards: Card[] = [];
 }

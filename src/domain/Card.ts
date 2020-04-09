@@ -18,8 +18,8 @@ export class Card {
 	}
 
 	name = 'Unknown';
-	duties: string[] = [];
-	collaborators: Collaborator[] = [];
+	duties: string = '';
+	collaborators: string = '';
 
 	constructor(data?: any) {
 		if (data) {

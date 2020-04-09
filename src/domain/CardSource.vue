@@ -1,25 +1,29 @@
 <template>
-	<div class="comp" v-if="false"></div>
+  <div class="comp" v-if="false"></div>
 </template>
 
 <script lang="ts">
 import { Card } from "./Card";
 
 export default {
-	data() {
-		return {
-			list: []
-		};
-	},
-	methods: {
-		async add() {
-			await Card.addNew();
-			this.list = await Card.load();
-		}
-	},
-	async created(this: any) {
-		this.list = await Card.load();
-	}
+  data() {
+    return {
+      list: []
+    };
+  },
+  methods: {
+    async add(this: any) {
+      await Card.addNew();
+      await this.load();
+    },
+    async load(this: any) {
+      this.list = await Card.load();
+      this.$emit("list", this.list);
+    }
+  },
+  async mounted(this: any) {
+    this.load();
+  }
 };
 </script>
 

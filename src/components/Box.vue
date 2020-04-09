@@ -1,12 +1,10 @@
 <template>
-  <div class="box">
-    <div
-      class="h-10 bg-blue-400"
-      draggable="true"
+  <div class="box"
+     draggable="true"
       @drag="drag"
       @dragend="dragEnd"
-      @dragstart="dragStart"
-    ></div>
+      @dragstart="dragStart">
+   
     <slot />
   </div>
 </template>

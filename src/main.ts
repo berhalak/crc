@@ -7,12 +7,13 @@ import router from './setup/router'
 import './setup/registerServiceWorker'
 import './setup/registerComponents'
 import './setup/registerEventBus'
-
+import { Application } from './app'
 
 Vue.config.productionTip = false
 
-
-new Vue({
-	router,
-	template: '<app />'
-}).$mount('#app')
+Application.start().then(a => {
+    new Vue({
+        router,
+        template: '<app />'
+    }).$mount('#app')
+})

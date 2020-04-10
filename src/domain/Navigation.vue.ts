@@ -1,36 +1,20 @@
 import { Component } from '@/infra/Component';
-import { Web, WebNav, WebBoard } from '@/app';
-import { bus } from 'geso';
+import { prop } from 'vue-strict';
+import { VueNav } from '@/web';
 
+export default class extends Component {
+    @prop
+    value: VueNav;
 
-
-export default class extends Component implements WebNav {
-    add: () => void;   
-    click: (id: any) => void;
-
-    addCard(name: string, id: string): void {
-
-        this.list.push({name, id})
+    clickAdd() {
+        this.value?.handlers.add();
     }
 
-    list = [];
-
-    clear() {
-        this.list = [];
-    }   
-
-    clickCard(e){
-        if (this.click){
-            this.click(e.id);
-        }
+    clickCard(e: any) {
+        this.value?.handlers.click(e.id);
     }
 
-    clickAdd(){        
-        if (this.add){
-            this.add();
-        }
-    }
-       mounted(){
-        bus.signal("mounted", this);
+    get list() {
+        return this.value?.state.list;
     }
 }

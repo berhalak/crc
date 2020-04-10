@@ -1,8 +1,9 @@
 import { bus, Bus } from "geso"
 import "@berhalak/js";
+import { WebApplication, CardComponent, NavComponent, PositionComponent, BoardComponent } from './api';
 
 export class Card {
-    render(web: WebCardFull) {
+    render(web: CardComponent) {
         this.write(web);
 
         web.onEdit(web => {
@@ -35,15 +36,15 @@ export class Card {
 type CardHandler = (card: Card) => Promise<void> | void;
 
 export class Navigation {
-    web: WebNav;
-    render(web: WebNav) {
+    web: NavComponent;
+    render(web: NavComponent) {
         this.web = web;
         web.clear();
         this.list.forEach(x => web.addCard(x.name, x.id));
-        web.click = (id) => {
+        web.onClick = (id) => {
             this.clicked.signal(this.list.find(x => x.id == id));
         }
-        web.add = () => {
+        web.onAdd = () => {
             this.addClicked.signal(this);
         }
     }
@@ -65,9 +66,9 @@ export class Navigation {
 }
 
 export class Position {
-    render(posWeb: WebPosition) {
+    render(posWeb: PositionComponent) {
         posWeb.usePosition({ x: this.x, y: this.y });
-        this.card.render(posWeb.cardFor(this.card.id));
+        this.card.render(posWeb.card());
     }
 
     constructor(public card?: Card) {
@@ -99,9 +100,9 @@ export class Position {
 }
 
 export class Board {
-    web: WebBoard;
+    web: BoardComponent;
 
-    render(web: WebBoard) {
+    render(web: BoardComponent) {
         this.web = web;
         this.list.forEach(x => {
             const posWeb = web.positionFor(x.id);
@@ -193,39 +194,12 @@ class Application {
         this.list = list;
     }
 
-    render(web: Web) {
+    render(web: WebApplication) {
         this.nav.render(web.nav());
         this.board.render(web.board());
     }
 }
 
-
-export interface WebCardFull {
-    onEdit(web: (web: WebCardFull) => void);
-    name: string;
-    desc: string;
-    links: string;
-    id: string;
-}
-export interface WebPosition {
-    cardFor(id: any): WebCardFull;
-    usePosition(arg0: { x: number; y: number; });
-
-}
-
-export interface WebNav {
-    add: () => void;
-    click: (id: any) => void;
-    addCard(name: string, id: string): void;
-    clear();
-}
-export interface WebBoard {
-    positionFor(id: string): WebPosition;
-}
-export interface Web {
-    nav(): WebNav;
-    board(): WebBoard;
-}
 
 const app = new Application();
 export { app }

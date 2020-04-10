@@ -1,13 +1,19 @@
 import { Component } from '@/infra/Component';
-import { prop } from 'vue-strict';
+import { Web, WebNav, WebBoard } from '@/app';
+import { bus } from 'geso';
 
 
 
+export default class extends Component implements Web {
+    nav(): WebNav {
+        return this.$refs.nav;
+    }    
+    
+    board(): WebBoard {
+        return this.$refs.board;
+    }
 
-export default class extends Component {
-    public msg = "Hello from code behind";
-
-    public created() {
-        this.$trigger("Started", "Home started");
+    mounted(){
+        bus.emit("mounted", this);
     }
 }

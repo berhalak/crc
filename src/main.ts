@@ -7,13 +7,18 @@ import router from './setup/router'
 import './setup/registerServiceWorker'
 import './setup/registerComponents'
 import './setup/registerEventBus'
-import { Application } from './app'
+import { app, Web } from './app'
+import { bus } from 'geso'
 
 Vue.config.productionTip = false
 
-Application.start().then(a => {
+app.start().then(a => {
     new Vue({
         router,
         template: '<app />'
-    }).$mount('#app')
+    }).$mount('#app');
 })
+
+bus.match("mounted", (web: Web) => {
+    app.render(web);
+});

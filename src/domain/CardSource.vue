@@ -3,7 +3,6 @@
 </template>
 
 <script lang="ts">
-import { Card } from "./Card";
 
 export default {
   data() {

@@ -1,34 +1,48 @@
 import { bus, Bus } from "geso"
 import "@berhalak/js";
-import { WebApplication, CardComponent, NavComponent, PositionComponent, BoardComponent } from './api';
 
-export class Card {
-    render(web: CardComponent) {
-        this.write(web);
+export class List {
+    constructor(public list: any[]) {
 
-        web.onEdit(web => {
-            this.read(web);
-        })
+    }
+}
+
+export class Label {
+    constructor(public text: string) {
+
+    }
+}
+
+export class Box {
+    constructor(public x: number, public y: number, public content: any) {
+
+    }
+}
+
+export class Form {
+    get(name: string) {
+        return (this as any)[name]
+    }
+    set(name: string, ctrl: any) {
+        (this as any)[name] = ctrl;
+        return this;
     }
 
+}
+
+export class TextField {
+    constructor(public text = '') {
+
+    }
+}
+
+export class Card {
     name = 'Unknown';
     desc = '';
     links = '';
     id = String.uid();
-
-    write(ui: any) {
-        ui.name = this.name;
-        ui.desc = this.desc;
-        ui.links = this.links;
-    }
-
-    read(ui: any) {
-        this.name = ui.name;
-        this.desc = ui.desc;
-        this.links = ui.links;
-
-        // us global bus
-        bus.signal(this);
+    render() {
+        return new Form().set("name", new TextField(this.name));
     }
 }
 
@@ -36,39 +50,29 @@ export class Card {
 type CardHandler = (card: Card) => Promise<void> | void;
 
 export class Navigation {
-    web: NavComponent;
-    render(web: NavComponent) {
-        this.web = web;
-        web.clear();
-        this.list.forEach(x => web.addCard(x.name, x.id));
-        web.onClick = (id) => {
-            this.clicked.signal(this.list.find(x => x.id == id));
-        }
-        web.onAdd = () => {
-            this.addClicked.signal(this);
-        }
-    }
 
     list: Card[] = [];
 
     showAll(cards: Card[]) {
         this.list = [...cards];
-        this.render(this.web);
     }
 
     show(card: Card) {
         this.list.push(card);
-        this.render(this.web);
     }
 
     clicked = new Bus<Card>();
     addClicked = new Bus();
+
+    render() {
+        return new List(this.list.map(x => x.render()));
+    }
 }
 
 export class Position {
-    render(posWeb: PositionComponent) {
-        posWeb.usePosition({ x: this.x, y: this.y });
-        this.card.render(posWeb.card());
+
+    render() {
+        return new Box(this.x, this.y, this.card.render());
     }
 
     constructor(public card?: Card) {
@@ -100,20 +104,14 @@ export class Position {
 }
 
 export class Board {
-    web: BoardComponent;
 
-    render(web: BoardComponent) {
-        this.web = web;
-        this.list.forEach(x => {
-            const posWeb = web.positionFor(x.id);
-            x.render(posWeb);
-        });
+    render() {
+        return new List(this.list.map(x => x.render()));
     }
 
     show(card: Card) {
         const pos = new Position(card);
         this.list.push(pos);
-        pos.render(this.web.positionFor(pos.id));
     }
 
     list: Position[] = [];
@@ -192,11 +190,6 @@ class Application {
         this.nav = nav;
         this.board = board;
         this.list = list;
-    }
-
-    render(web: WebApplication) {
-        this.nav.render(web.nav());
-        this.board.render(web.board());
     }
 }
 

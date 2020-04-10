@@ -14,6 +14,6 @@ export default class extends Component implements Web {
     }
 
     mounted(){
-        bus.emit("mounted", this);
+        bus.signal("mounted", this);
     }
 }

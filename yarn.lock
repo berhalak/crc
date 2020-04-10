@@ -3273,10 +3273,10 @@ gaze@^1.0.0:
   dependencies:
     globule "^1.0.0"
 
-geso@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/geso/-/geso-0.0.6.tgz#9d517db114df2d77d08e7166c02b2b17f03629e2"
-  integrity sha512-R0+qtgQzKuLTK/EHwmu+00l+lnJSJorxzHqK9ktUeoZPoUsUI/qmaeZWqb5v+D9iRZZA8acFDjXHYpT/0NUk2A==
+geso@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/geso/-/geso-0.0.7.tgz#888efd46fe3f0ac0e3cf0f264e4f71087c7ba6ac"
+  integrity sha512-bN4YRrGMOprPH0630z8extJMkG5ezKbxd69CMIxplMP6ukbvEHTzXEu/1Y1/bz6JsFMFSB/GvCsnWoFLzph/ZQ==
 
 get-caller-file@^1.0.1:
   version "1.0.3"

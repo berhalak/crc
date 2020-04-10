@@ -10,7 +10,7 @@ export class Card {
         })
     }
 
-    name = '';
+    name = 'Unknown';
     desc = '';
     links = '';
     id = String.uid();
@@ -35,15 +35,16 @@ export class Card {
 type CardHandler = (card: Card) => Promise<void> | void;
 
 export class Navigation {
-
-    render(arg0: WebNav) {
-        arg0.clear();
-        this.list.forEach(x=> arg0.addCard(x.name, x.id));
-        arg0.click = (id) => {
-            this.clicked.emit(this.list.find(x=> x.id == id));
+    web: WebNav;
+    render(web: WebNav) {
+        this.web = web;
+        web.clear();
+        this.list.forEach(x => web.addCard(x.name, x.id));
+        web.click = (id) => {
+            this.clicked.signal(this.list.find(x => x.id == id));
         }
-        arg0.add = () => {
-            this.addClicked.emit(this);
+        web.add = () => {
+            this.addClicked.signal(this);
         }
     }
 
@@ -51,12 +52,12 @@ export class Navigation {
 
     showAll(cards: Card[]) {
         this.list = [...cards];
-        bus.signal(this);
+        this.render(this.web);
     }
 
     show(card: Card) {
         this.list.push(card);
-        bus.signal(this);
+        this.render(this.web);
     }
 
     clicked = new Bus<Card>();
@@ -65,7 +66,7 @@ export class Navigation {
 
 export class Position {
     render(posWeb: WebPosition) {
-        posWeb.usePosition({ x : this.x, y : this.y});
+        posWeb.usePosition({ x: this.x, y: this.y });
         this.card.render(posWeb.cardFor(this.card.id));
     }
 
@@ -201,10 +202,10 @@ class Application {
 
 export interface WebCardFull {
     onEdit(web: (web: WebCardFull) => void);
-    name : string;
-    desc : string;
-    links : string;
-    id : string;
+    name: string;
+    desc: string;
+    links: string;
+    id: string;
 }
 export interface WebPosition {
     cardFor(id: any): WebCardFull;
@@ -215,11 +216,11 @@ export interface WebPosition {
 export interface WebNav {
     add: () => void;
     click: (id: any) => void;
-    addCard(name: string, id : string): void;
+    addCard(name: string, id: string): void;
     clear();
 }
 export interface WebBoard {
-    positionFor(id: string) : WebPosition;
+    positionFor(id: string): WebPosition;
 }
 export interface Web {
     nav(): WebNav;

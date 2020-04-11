@@ -1,64 +1,27 @@
 import { bus, Bus } from "geso"
 import "@berhalak/js";
-import { WebApplication, CardComponent, NavComponent, PositionComponent, BoardComponent } from './api';
+
 
 export class Card {
-    render(web: CardComponent) {
-        this.write(web);
-
-        web.onEdit(web => {
-            this.read(web);
-        })
-    }
-
     name = 'Unknown';
     desc = '';
     links = '';
     id = String.uid();
-
-    write(ui: any) {
-        ui.name = this.name;
-        ui.desc = this.desc;
-        ui.links = this.links;
-    }
-
-    read(ui: any) {
-        this.name = ui.name;
-        this.desc = ui.desc;
-        this.links = ui.links;
-
-        // us global bus
-        bus.signal(this);
-    }
 }
 
 
 type CardHandler = (card: Card) => Promise<void> | void;
 
 export class Navigation {
-    web: NavComponent;
-    render(web: NavComponent) {
-        this.web = web;
-        web.clear();
-        this.list.forEach(x => web.addCard(x.name, x.id));
-        web.onClick = (id) => {
-            this.clicked.signal(this.list.find(x => x.id == id));
-        }
-        web.onAdd = () => {
-            this.addClicked.signal(this);
-        }
-    }
 
     list: Card[] = [];
 
     showAll(cards: Card[]) {
         this.list = [...cards];
-        this.render(this.web);
     }
 
     show(card: Card) {
         this.list.push(card);
-        this.render(this.web);
     }
 
     clicked = new Bus<Card>();
@@ -66,10 +29,7 @@ export class Navigation {
 }
 
 export class Position {
-    render(posWeb: PositionComponent) {
-        posWeb.usePosition({ x: this.x, y: this.y });
-        this.card.render(posWeb.card());
-    }
+
 
     constructor(public card?: Card) {
         if (card) {
@@ -100,20 +60,11 @@ export class Position {
 }
 
 export class Board {
-    web: BoardComponent;
-
-    render(web: BoardComponent) {
-        this.web = web;
-        this.list.forEach(x => {
-            const posWeb = web.positionFor(x.id);
-            x.render(posWeb);
-        });
-    }
 
     show(card: Card) {
+        if (this.list.find(x => x.id == card.id)) return;
         const pos = new Position(card);
         this.list.push(pos);
-        pos.render(this.web.positionFor(pos.id));
     }
 
     list: Position[] = [];
@@ -162,15 +113,15 @@ export class CardList {
     loaded = new Bus<Card[]>();
 }
 
-class Application {
-    nav: Navigation;
-    board: Board;
-    list: CardList;
-    async start() {
-        const nav = new Navigation();
-        const board = new Board();
+export class Application {
+    nav = new Navigation();
+    board = new Board();
+    list = new CardList();
 
-        const list = new CardList();
+    async start() {
+        const nav = this.nav;
+        const board = this.board;
+        const list = this.list;
         await list.load();
 
         list.loaded.on((cards: Card[]) => {
@@ -193,14 +144,6 @@ class Application {
         this.board = board;
         this.list = list;
     }
-
-    render(web: WebApplication) {
-        this.nav.render(web.nav());
-        this.board.render(web.board());
-    }
 }
 
-
-const app = new Application();
-export { app }
 

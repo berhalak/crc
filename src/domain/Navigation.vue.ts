@@ -1,20 +1,20 @@
 import { Component } from '@/infra/Component';
 import { prop } from 'vue-strict';
-import { VueNav } from '@/web';
+import { Navigation, Card } from '@/app';
 
 export default class extends Component {
     @prop
-    value: VueNav;
+    value: Navigation;
 
-    clickAdd() {
-        this.value?.handlers.add();
+    clicked(card: Card) {
+        this.value?.clicked.signal(card);
     }
 
-    clickCard(e: any) {
-        this.value?.handlers.click(e.id);
+    add() {
+        this.value?.addClicked.signal(this.value);
     }
 
     get list() {
-        return this.value?.state.list;
+        return this.value?.list;
     }
 }

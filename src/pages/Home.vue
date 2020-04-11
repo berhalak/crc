@@ -1,11 +1,11 @@
 <template>
 	<div class="bg-gray-300 h-full">
-		<div class="grid grid-cols-12 h-full">
-			<div class="px-4 col-span-3 bg-gray-200">
-				<Navigation :value="store.nav()" />
+		<div class="flex h-full">
+			<div class="px-4 w-56 bg-gray-200">
+				<Navigation :value="nav" />
 			</div>
-			<div class="col-span-9">
-				<Board :value="store.board()" />
+			<div class="flex-grow">
+				<Board :value="board" />
 			</div>
 		</div>
 	</div>

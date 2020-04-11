@@ -1,49 +1,12 @@
 import { bus, Bus } from "geso"
 import "@berhalak/js";
 
-export class List {
-    constructor(public list: any[]) {
-
-    }
-}
-
-export class Label {
-    constructor(public text: string) {
-
-    }
-}
-
-export class Box {
-    constructor(public x: number, public y: number, public content: any) {
-
-    }
-}
-
-export class Form {
-    get(name: string) {
-        return (this as any)[name]
-    }
-    set(name: string, ctrl: any) {
-        (this as any)[name] = ctrl;
-        return this;
-    }
-
-}
-
-export class TextField {
-    constructor(public text = '') {
-
-    }
-}
 
 export class Card {
     name = 'Unknown';
     desc = '';
     links = '';
     id = String.uid();
-    render() {
-        return new Form().set("name", new TextField(this.name));
-    }
 }
 
 
@@ -63,17 +26,10 @@ export class Navigation {
 
     clicked = new Bus<Card>();
     addClicked = new Bus();
-
-    render() {
-        return new List(this.list.map(x => x.render()));
-    }
 }
 
 export class Position {
 
-    render() {
-        return new Box(this.x, this.y, this.card.render());
-    }
 
     constructor(public card?: Card) {
         if (card) {
@@ -105,11 +61,8 @@ export class Position {
 
 export class Board {
 
-    render() {
-        return new List(this.list.map(x => x.render()));
-    }
-
     show(card: Card) {
+        if (this.list.find(x => x.id == card.id)) return;
         const pos = new Position(card);
         this.list.push(pos);
     }
@@ -160,15 +113,15 @@ export class CardList {
     loaded = new Bus<Card[]>();
 }
 
-class Application {
-    nav: Navigation;
-    board: Board;
-    list: CardList;
-    async start() {
-        const nav = new Navigation();
-        const board = new Board();
+export class Application {
+    nav = new Navigation();
+    board = new Board();
+    list = new CardList();
 
-        const list = new CardList();
+    async start() {
+        const nav = this.nav;
+        const board = this.board;
+        const list = this.list;
         await list.load();
 
         list.loaded.on((cards: Card[]) => {
@@ -193,7 +146,4 @@ class Application {
     }
 }
 
-
-const app = new Application();
-export { app }
 

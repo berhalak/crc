@@ -1,14 +1,10 @@
 <template>
-	<div class="bg-gray-300">
-		<div class="grid grid-cols-12 h-full">
-			<div class="px-4 col-span-3 bg-gray-200">
-				<CardList ref="list" @click="c => $refs.board.add(c)" />
-			</div>
-			<div class="col-span-9">
-				<CardBoard ref="board" />
-			</div>
-		</div>
+	<div class="h-full relative select-none">
+		<Position v-for="(i,k) in list" :key="k" :value="i" />
+
+		<div
+			class="absolute rounded px-4 py-2 text-green-900 shadow-lg font-medium bg-green-400"
+			style="top: 4px; right: 4px"
+		>Save</div>
 	</div>
 </template>
-<style lang="scss">
-</style>

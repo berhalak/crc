@@ -1,8 +1,12 @@
+import { Board } from './../app';
 import { Component } from '@/infra/Component';
-import { Board, Card } from './Card';
+import { prop } from 'vue-strict';
 
 export default class extends Component {
+    @prop
+    value: Board;
 
-    created() {
+    get list() {
+        return this.value?.list;
     }
 }

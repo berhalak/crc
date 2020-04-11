@@ -1,13 +1,18 @@
 import { Component } from '@/infra/Component';
-import { prop } from 'vue-strict';
-
-
-
+import { Application } from '@/app';
 
 export default class extends Component {
-    public msg = "Hello from code behind";
+    app = new Application();
 
-    public created() {
-        this.$trigger("Started", "Home started");
+    async created() {
+        await this.app.start();
+    }
+
+    get nav() {
+        return this.app.nav;
+    }
+
+    get board() {
+        return this.app.board;
     }
 }

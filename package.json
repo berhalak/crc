@@ -6,6 +6,7 @@
 		"start": "vue-cli-service serve",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
+		"deploy": "vue-cli-service build && firebase deploy",
 		"test:e2e": "vue-cli-service test:e2e",
 		"test:unit": "vue-cli-service test:unit"
 	},

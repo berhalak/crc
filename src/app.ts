@@ -10,6 +10,8 @@ export class Card {
 }
 
 
+
+
 type CardHandler = (card: Card) => Promise<void> | void;
 
 export class Navigation {
@@ -60,11 +62,18 @@ export class Position {
 }
 
 export class Board {
+    hide(value: Position) {
+        this.list.removeBy(x => x.id == value.id);
+    }
 
     show(card: Card) {
         if (this.list.find(x => x.id == card.id)) return;
         const pos = new Position(card);
         this.list.push(pos);
+    }
+
+    async save() {
+
     }
 
     list: Position[] = [];
@@ -98,15 +107,12 @@ export class CardList {
         })
     }
 
-    card(id: string) {
-        return this.list.find(x => x.id == id);
+    async save() {
+        table("cards", this.list);
     }
 
-    constructor() {
-        // whenever card changes
-        bus.for(Card).on(card => {
-            table("cards", this.list);
-        });
+    card(id: string) {
+        return this.list.find(x => x.id == id);
     }
 
     created = new Bus<Card>();
@@ -116,12 +122,12 @@ export class CardList {
 export class Application {
     nav = new Navigation();
     board = new Board();
-    list = new CardList();
+    cards = new CardList();
 
     async start() {
         const nav = this.nav;
         const board = this.board;
-        const list = this.list;
+        const list = this.cards;
         await list.load();
 
         list.loaded.on((cards: Card[]) => {
@@ -142,8 +148,7 @@ export class Application {
 
         this.nav = nav;
         this.board = board;
-        this.list = list;
+        this.cards = list;
     }
 }
-
 

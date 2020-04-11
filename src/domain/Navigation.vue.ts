@@ -4,17 +4,17 @@ import { Navigation, Card } from '@/app';
 
 export default class extends Component {
     @prop
-    value: Navigation;
+    nav: Navigation;
 
     clicked(card: Card) {
-        this.value?.clicked.signal(card);
+        this.nav?.clicked.signal(card);
     }
 
     add() {
-        this.value?.addClicked.signal(this.value);
+        this.nav?.addClicked.signal(this.nav);
     }
 
     get list() {
-        return this.value?.list;
+        return this.nav?.list;
     }
 }

@@ -1,5 +1,5 @@
 <template>
-	<div class="comp" v-if="value">
+	<div class="comp" v-if="nav">
 		<div class="py-2 flex justify-between items-baseline">
 			<div class="font-medium text-gray-800">Navigation</div>
 			<div

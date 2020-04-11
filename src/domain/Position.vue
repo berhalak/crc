@@ -3,7 +3,10 @@
 		<div class="flex">
 			<Textbox v-model="card.name" class="flex-grow border-0 border-b" />
 			<div class="flex items-center">
-				<div class="rounded mr-2 px-2 text-sm py-2 text-gray-100 shadow-lg font-medium bg-blue-400">Hide</div>
+				<div
+					@click="hide()"
+					class="rounded mr-2 px-2 text-sm py-2 text-gray-100 shadow-lg font-medium bg-blue-400"
+				>Hide</div>
 			</div>
 		</div>
 		<div class="flex">

@@ -1,12 +1,21 @@
-import { Board } from './../app';
+import { bus } from 'geso';
+import { Board, CardList } from './../app';
 import { Component } from '@/infra/Component';
 import { prop } from 'vue-strict';
 
 export default class extends Component {
     @prop
-    value: Board;
+    board: Board;
+
+    @prop
+    cards: CardList;
 
     get list() {
-        return this.value?.list;
+        return this.board?.list;
+    }
+
+    save() {
+        this.cards?.save();
+        this.board?.save();
     }
 }

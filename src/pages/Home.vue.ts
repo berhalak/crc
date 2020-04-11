@@ -12,6 +12,10 @@ export default class extends Component {
         return this.app.nav;
     }
 
+    get cards() {
+        return this.app.cards;
+    }
+
     get board() {
         return this.app.board;
     }

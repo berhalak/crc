@@ -105,6 +105,7 @@ export class CardList {
             Object.assign(c, x);
             return c;
         })
+        this.loaded.signal(this.list);
     }
 
     async save() {
@@ -128,7 +129,6 @@ export class Application {
         const nav = this.nav;
         const board = this.board;
         const list = this.cards;
-        await list.load();
 
         list.loaded.on((cards: Card[]) => {
             nav.showAll(cards);
@@ -149,6 +149,9 @@ export class Application {
         this.nav = nav;
         this.board = board;
         this.cards = list;
+
+        await list.load();
+
     }
 }
 

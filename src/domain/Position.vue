@@ -1,11 +1,11 @@
 <template>
-	<Box>
+	<Box class="shadow">
 		<div class="flex">
 			<Textbox v-model="card.name" class="flex-grow border-0 border-b" />
 			<div class="flex items-center">
 				<div
 					@click="hide()"
-					class="rounded mr-2 px-2 text-sm py-2 text-gray-100 shadow-lg font-medium bg-blue-400"
+					class="rounded cursor-pointer mr-2 px-2 text-sm py-2 text-gray-100 shadow-lg font-medium bg-blue-400 select-none"
 				>Hide</div>
 			</div>
 		</div>

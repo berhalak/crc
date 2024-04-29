@@ -1,5 +1,5 @@
 <template>
-  <textarea v-if="multi !== undefined" class="border p-2 outline-none" />
+  <textarea v-if="multi !== undefined" class="border p-2 outline-none" v-model="text" />
   <input v-else type="text" v-model="text" class="textbox" />
 </template>
 <script>

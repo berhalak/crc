@@ -9,7 +9,7 @@
 		"deploy": "vue-cli-service build && firebase deploy",
 		"test:e2e": "vue-cli-service test:e2e",
 		"test:unit": "vue-cli-service test:unit",
-    "server": "http-server dist"
+    "server": "http-server -p 8999 dist"
 	},
 	"dependencies": {
 		"@berhalak/js": "^0.0.11",

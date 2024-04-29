@@ -1,6 +1,6 @@
 <template>
 	<div class="h-full relative select-none">
-		<Position v-for="(i,k) in list" :key="k" :value="i" :board="board" />
+		<Position v-for="i in list" :key="i.id" :value="i" :board="board" />
 
 		<Button
 			style="top: 4px; right: 4px"

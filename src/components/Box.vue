@@ -15,14 +15,19 @@
   let globalIndex = 10;
 
   export default {
+    props: ['cords'],
     data() {
       return {
-        x: 0,
-        y: 0,
+        x: this.$props.cords ? this.$props.cords.x : 0,
+        y: this.$props.cords ? this.$props.cords.y : 0,
         startx: 0,
         starty: 0,
         index: 10,
       };
+    },
+    mounted() {
+      this.$el.style.top = this.y + 'px';
+      this.$el.style.left = this.x + 'px';
     },
     methods: {
       clicked() {
@@ -31,6 +36,11 @@
       },
       dragEnd(e) {
         this.$el.classList.toggle('drag');
+
+        this.$emit('save', {
+          x: this.$el.offsetLeft,
+          y: this.$el.offsetTop,
+        });
       },
       dragStart(e) {
         this.x = e.x;

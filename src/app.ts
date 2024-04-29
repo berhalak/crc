@@ -63,7 +63,9 @@ export class Position {
   }
 
   fromJson(data: any) {
-    return this;
+    this.id = data.id;
+    this.x = data.x;
+    this.y = data.y;
   }
 }
 
@@ -80,6 +82,14 @@ export class Board {
 
   async save() {
     table('positions', this.list.map(x => x.toJson()));
+  }
+
+  pos(id: string, x: number, y: number) {
+    const pos = this.list.find(x => x.id == id);
+    if (pos) {
+      pos.x = x;
+      pos.y = y;
+    }
   }
 
   list: Position[] = [];
@@ -165,5 +175,10 @@ export class Application {
 
     await list.load();
     await board.load();
+
+    board.list.forEach(x => {
+      const card = list.card(x.id);
+      x.useCard(card);
+    });
   }
 }

@@ -16,4 +16,8 @@ export default class extends Component {
   hide() {
     this.board?.hide(this.value);
   }
+
+  savePos(el: { x: number, y: number }) {
+    this.board.pos(this.card!.id, el.x, el.y);
+  }
 }

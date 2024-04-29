@@ -1,5 +1,5 @@
 <template>
-	<Box class="shadow">
+	<Box class="shadow" :cords="value" @save="el => savePos(el)">
 		<div class="flex">
 			<Textbox v-model="card.name" class="flex-grow border-0 border-b" />
 			<div class="flex items-center">

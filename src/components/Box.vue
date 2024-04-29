@@ -6,6 +6,9 @@
     @drag="drag"
     @dragend="dragEnd"
     @dragstart="dragStart"
+    @touchmove="touchMove"
+    @touchend="touchEnd"
+    @touchstart="touchStart"
     :style="{ zIndex: index }"
   >
     <slot />
@@ -57,6 +60,30 @@
         const newLeft = this.startx + (e.x - this.x);
         this.$el.style.top = newTop + 'px';
         this.$el.style.left = newLeft + 'px';
+      },
+      touchStart(e) {
+        this.x = e.touches[0].clientX;
+        this.y = e.touches[0].clientY;
+        this.startx = this.$el.offsetLeft;
+        this.starty = this.$el.offsetTop;
+        this.$el.classList.toggle('drag');
+        this.index = ++globalIndex;
+      },
+      touchMove(e) {
+        if (e.touches[0].screenX == 0) return;
+
+        const newTop = this.starty + (e.touches[0].clientY - this.y);
+        const newLeft = this.startx + (e.touches[0].clientX - this.x);
+        this.$el.style.top = newTop + 'px';
+        this.$el.style.left = newLeft + 'px';
+      },
+      touchEnd(e) {
+        this.$el.classList.toggle('drag');
+
+        this.$emit('save', {
+          x: this.$el.offsetLeft,
+          y: this.$el.offsetTop,
+        });
       },
     },
   };

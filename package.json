@@ -3,35 +3,34 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"start": "vue-cli-service serve",
+		"dev": "vue-cli-service serve",
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"deploy": "vue-cli-service build && firebase deploy",
 		"test:e2e": "vue-cli-service test:e2e",
-		"test:unit": "vue-cli-service test:unit"
+		"test:unit": "vue-cli-service test:unit",
+    "server": "http-server dist"
 	},
 	"dependencies": {
 		"@berhalak/js": "^0.0.11",
-		"geso": "^0.0.7",
-		"register-service-worker": "^1.7.1",
-		"vue": "^2.6.11",
-		"vue-event-manager": "^2.1.2",
-		"vue-router": "^3.1.6",
-		"vue-strict": "^0.0.21"
+		"register-service-worker": "1.7.1",
+		"vue": "2.6.11",
+		"vue-event-manager": "2.1.2",
+		"vue-router": "3.1.6",
+		"vue-strict": "0.0.21"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-pwa": "^4.3.1",
-		"@vue/cli-plugin-typescript": "^4.3.1",
-		"@vue/cli-service": "^4.3.1",
-		"node-sass": "^7.0.0",
+		"@vue/cli-plugin-pwa": "4.3.1",
+		"@vue/cli-plugin-typescript": "4.3.1",
+		"@vue/cli-service": "4.3.1",
 		"postcss-animation": "0.0.12",
-		"postcss-mixins": "^6.2.3",
-		"postcss-preset-env": "^6.7.0",
-		"sass-loader": "^8.0.2",
-		"tailwindcss": "^1.2.0",
-		"typescript": "^3.8.3",
-		"vue-cli-plugin-portal": "^1.1.1",
-		"vue-template-compiler": "^2.6.11"
+		"postcss-mixins": "6.2.3",
+		"postcss-preset-env": "6.7.0",
+		"tailwindcss": "1.2.0",
+		"typescript": "3.8.3",
+		"vue-cli-plugin-portal": "1.1.1",
+		"vue-template-compiler": "2.6.11",
+    "http-server": "0.12.3"
 	},
 	"browserslist": [
 		"last 2 Chrome versions"

@@ -9,8 +9,3 @@ export default {
 	props: ["value"]
 };
 </script>
-
-<style lang="scss">
-.comp {
-}
-</style>

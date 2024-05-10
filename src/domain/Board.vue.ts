@@ -9,6 +9,8 @@ export default class extends Component {
   @prop
   cards: CardList;
 
+  timeout: any;
+
   get list() {
     return this.board?.list;
   }
@@ -16,5 +18,18 @@ export default class extends Component {
   save() {
     this.cards?.save();
     this.board?.save();
+  }
+
+  created() {
+    this.timeout = setInterval(() => {
+      this.save();
+    }, 2000);
+  }
+
+  beforeDestroy(): void {
+    if (this.timeout) {
+      clearInterval(this.timeout);
+    }
+    this.timeout = null;
   }
 }

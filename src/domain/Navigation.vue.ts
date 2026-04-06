@@ -7,11 +7,11 @@ export default class extends Component {
   nav: Navigation;
 
   clicked(card: Card) {
-    this.nav?.clicked.signal(card);
+    this.nav?.cardClicked(card);
   }
 
   add() {
-    this.nav?.addClicked.signal(this.nav);
+    this.nav?.requestAdd();
   }
 
   get list() {

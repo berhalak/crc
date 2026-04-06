@@ -1,35 +1,25 @@
 import '@berhalak/js';
 
-export class Card {
-  name = 'Unknown';
-  desc = '';
-  links = '';
-  id = String.uid();
-}
+// --- Storage (Strategy as a function-shaped type, not a class) ---
 
-type CardHandler = (card: Card) => Promise<void> | void;
+export type Storage = {
+  read: (key: string) => any[];
+  write: (key: string, data: any[]) => void;
+};
 
-export class Navigation {
-  list: Card[] = [];
+export const localStore: Storage = {
+  read: key => JSON.parse(localStorage.getItem(key) || '[]'),
+  write: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+};
 
-  showAll(cards: Card[]) {
-    this.list = [...cards];
-  }
-
-  show(card: Card) {
-    this.list.push(card);
-  }
-
-  clicked = new Bus<Card>();
-  addClicked = new Bus();
-}
+// --- Bus ---
 
 type Handler<T> = (value: T) => void;
 
 export class Bus<T> {
   private handlers: Handler<T>[] = [];
-  public signal(value: T) {
-    this.handlers.forEach(x => x(value));
+  public signal(value?: T) {
+    this.handlers.forEach(x => x(value as T));
   }
 
   public on(handler: Handler<T>) {
@@ -37,6 +27,16 @@ export class Bus<T> {
   }
 }
 
+// --- Card ---
+
+export class Card {
+  name = 'Unknown';
+  desc = '';
+  links = '';
+  id = String.uid();
+}
+
+// --- Position ---
 
 export class Position {
   constructor(public card?: Card) {
@@ -49,81 +49,100 @@ export class Position {
   x = 0;
   y = 0;
 
-  toJson() {
-    return {
-      id: this.id,
-      x: this.x,
-      y: this.y,
-    };
-  }
-
   useCard(card: Card) {
     this.card = card;
     this.id = card.id;
   }
-
-  fromJson(data: any) {
-    this.id = data.id;
-    this.x = data.x;
-    this.y = data.y;
-  }
 }
 
+function serializePosition(p: Position) {
+  return { id: p.id, x: p.x, y: p.y };
+}
+
+function deserializePosition(data: any): Position {
+  const p = new Position();
+  p.id = data.id;
+  p.x = data.x;
+  p.y = data.y;
+  return p;
+}
+
+// --- Navigation ---
+
+export class Navigation {
+  list: Card[] = [];
+
+  showAll(cards: Card[]) {
+    this.list = [...cards];
+  }
+
+  show(card: Card) {
+    this.list.push(card);
+  }
+
+  cardClicked(card: Card) {
+    this.clicked.signal(card);
+  }
+
+  requestAdd() {
+    this.addClicked.signal();
+  }
+
+  clicked = new Bus<Card>();
+  addClicked = new Bus<void>();
+}
+
+// --- Board ---
+
 export class Board {
+  list: Position[] = [];
+
+  constructor(private storage: Storage = localStore) {}
+
   hide(value: Position) {
     this.list.removeBy(x => x.id == value.id);
   }
 
   show(card: Card) {
     if (this.list.find(x => x.id == card.id)) return;
-    const pos = new Position(card);
-    this.list.push(pos);
+    this.list.push(new Position(card));
   }
 
-  async save() {
-    table('positions', this.list.map(x => x.toJson()));
-  }
-
-  pos(id: string, x: number, y: number) {
-    const pos = this.list.find(x => x.id == id);
+  updatePosition(id: string, x: number, y: number) {
+    const pos = this.list.find(p => p.id == id);
     if (pos) {
       pos.x = x;
       pos.y = y;
     }
   }
 
-  list: Position[] = [];
+  async save() {
+    this.storage.write('positions', this.list.map(serializePosition));
+  }
 
   async load() {
-    this.list = table('positions').map(x => {
-      const p = new Position();
-      p.fromJson(x);
-      return p;
-    });
+    this.list = this.storage.read('positions').map(deserializePosition);
   }
 }
 
-function table(name: string, data?: any[]) {
-  if (!data) {
-    const raw = localStorage.getItem(name) || '[]';
-    const rawList = JSON.parse(raw) as any[];
-    return rawList;
-  } else {
-    localStorage.setItem(name, JSON.stringify(data));
-    return data;
-  }
-}
+// --- CardList ---
 
 export class CardList {
+  private list: Card[] = [];
+
+  constructor(private storage: Storage = localStore) {}
+
   add() {
     this.list.push(new Card());
     this.created.signal(this.list.last());
   }
 
-  private list: Card[] = [];
+  card(id: string) {
+    return this.list.find(x => x.id == id);
+  }
 
   async load() {
-    this.list = table('cards').map(x => {
+    this.list = this.storage.read('cards').map(x => {
       const c = new Card();
       Object.assign(c, x);
       return c;
@@ -132,15 +151,27 @@ export class CardList {
   }
 
   async save() {
-    table('cards', this.list);
-  }
-
-  card(id: string) {
-    return this.list.find(x => x.id == id);
+    this.storage.write('cards', this.list);
   }
 
   created = new Bus<Card>();
   loaded = new Bus<Card[]>();
+}
+
+// --- Application wiring (free functions, not a -Wirer class) ---
+
+function wireEvents(nav: Navigation, board: Board, cards: CardList) {
+  cards.loaded.on(all => nav.showAll(all));
+  nav.clicked.on(card => board.show(card));
+  nav.addClicked.on(() => cards.add());
+  cards.created.on(card => nav.show(card));
+}
+
+function linkPositionsToCards(board: Board, cards: CardList) {
+  board.list.forEach(p => {
+    const card = cards.card(p.id);
+    if (card) p.useCard(card);
+  });
 }
 
 export class Application {
@@ -149,36 +180,9 @@ export class Application {
   cards = new CardList();
 
   async start() {
-    const nav = this.nav;
-    const board = this.board;
-    const list = this.cards;
-
-    list.loaded.on((cards: Card[]) => {
-      nav.showAll(cards);
-    });
-
-    nav.clicked.on(card => {
-      board.show(card);
-    });
-
-    nav.addClicked.on(async () => {
-      list.add();
-    });
-
-    list.created.on(card => {
-      nav.show(card);
-    });
-
-    this.nav = nav;
-    this.board = board;
-    this.cards = list;
-
-    await list.load();
-    await board.load();
-
-    board.list.forEach(x => {
-      const card = list.card(x.id);
-      x.useCard(card);
-    });
+    wireEvents(this.nav, this.board, this.cards);
+    await this.cards.load();
+    await this.board.load();
+    linkPositionsToCards(this.board, this.cards);
   }
 }

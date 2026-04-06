@@ -2,6 +2,8 @@ import { Board, CardList } from './../app';
 import { Component } from '@/infra/Component';
 import { prop } from 'vue-strict';
 
+const AUTOSAVE_INTERVAL_MS = 2000;
+
 export default class extends Component {
   @prop
   board: Board;
@@ -23,7 +25,7 @@ export default class extends Component {
   created() {
     this.timeout = setInterval(() => {
       this.save();
-    }, 2000);
+    }, AUTOSAVE_INTERVAL_MS);
   }
 
   beforeDestroy(): void {

@@ -18,6 +18,7 @@ export default class extends Component {
   }
 
   savePos(el: { x: number, y: number }) {
-    this.board.pos(this.card!.id, el.x, el.y);
+    if (!this.card) return;
+    this.board.updatePosition(this.card.id, el.x, el.y);
   }
 }
